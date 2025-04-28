@@ -21,10 +21,11 @@ input.on_pin_pressed(TouchPin.P1, on_pin_pressed_p1)
 A_antiExplode = 0
 globalTime = 0
 time = 0
+radio.set_group(143)
 # set this to length of 1 attempt
 ROUNDLENGTH = 10
 # set this to break time between "A" press and game start
-PAUSE = 3
+PAUSE = 10
 highscore = 0
 time = 0
 score = 0
@@ -42,11 +43,12 @@ def on_forever():
         time = globalTime + PAUSE
         while time > globalTime:
             radio.send_string("" + str((time - globalTime)))
-        basic.clear_screen()
-        basic.show_string("GO")
+        # This is clear screen command
+        radio.send_number(0)
+        radio.send_string("GO")
         time = globalTime + ROUNDLENGTH
         while time > globalTime:
-            basic.show_number(time - globalTime)
+            radio.send_string("" + str((time - globalTime)))
         if score > highscore:
             highscore = score
         basic.show_leds("""
@@ -56,16 +58,16 @@ def on_forever():
             # # # # #
             # # # # #
             """)
-        basic.clear_screen()
         basic.pause(500)
-        basic.show_string("Score")
-        basic.show_number(score)
+        radio.send_number(0)
+        radio.send_string("Score")
+        radio.send_string("" + str((score)))
         basic.pause(2000)
-        basic.clear_screen()
-        basic.show_string("HI")
-        basic.show_number(highscore)
+        radio.send_number(0)
+        radio.send_string("HI")
+        radio.send_string("" + str((highscore)))
         basic.pause(2000)
-        basic.clear_screen()
+        radio.send_number(0)
         score = 0
         A_antiExplode = 0
 basic.forever(on_forever)

@@ -1,69 +1,21 @@
 input.onPinPressed(TouchPin.P0, function () {
-    if (time - globalTime > 0) {
-        score += 5
-    }
-})
-// insert sick beats here if u want
-radio.onReceivedNumber(function (receivedNumber) {
-    if (A_antiExplode == 0) {
-        A_antiExplode += 1
+    if (Game_On == 1) {
+        radio.sendValue("P0", 1000)
     }
 })
 input.onPinPressed(TouchPin.P1, function () {
-    if (time - globalTime > 0) {
-        score += 10
+    if (Game_On == 1) {
+        radio.sendValue("P1", 500)
     }
 })
-let A_antiExplode = 0
+radio.onReceivedValue(function (name, value) {
+    if (name == "Start") {
+        Game_On = value
+    }
+})
 let globalTime = 0
-let time = 0
+let Game_On = 0
 radio.setGroup(143)
-// set this to length of 1 attempt
-let ROUNDLENGTH = 10
-// set this to break time between "A" press and game start
-let PAUSE = 3
-let highscore = 0
-time = 0
-let score = 0
-globalTime = 0
-A_antiExplode = 0
 loops.everyInterval(1000, function () {
     globalTime += 1
-})
-basic.forever(function () {
-    if (A_antiExplode == 1) {
-        time = globalTime + PAUSE
-        while (time > globalTime) {
-            radio.sendString("" + (time - globalTime))
-        }
-        // This is clear screen command
-        radio.sendNumber(0)
-        radio.sendString("GO")
-        time = globalTime + ROUNDLENGTH
-        while (time > globalTime) {
-            radio.sendString("" + (time - globalTime))
-        }
-        if (score > highscore) {
-            highscore = score
-        }
-        basic.showLeds(`
-            # # # # #
-            # # # # #
-            # # # # #
-            # # # # #
-            # # # # #
-            `)
-        basic.pause(500)
-        radio.sendNumber(0)
-        radio.sendString("Score")
-        radio.sendString("" + (score))
-        basic.pause(2000)
-        radio.sendNumber(0)
-        radio.sendString("HI")
-        radio.sendString("" + (highscore))
-        basic.pause(2000)
-        radio.sendNumber(0)
-        score = 0
-        A_antiExplode = 0
-    }
 })
