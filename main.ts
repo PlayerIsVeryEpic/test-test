@@ -14,11 +14,25 @@ input.onPinPressed(TouchPin.P1, function () {
         score += 10
     }
 })
+radio.onReceivedValue(function (name, value) {
+    if (name == "a") {
+        basic.showString("SCORE")
+        basic.pause(500)
+        basic.showNumber(value)
+        basic.pause(500)
+    } else {
+        basic.showString("HI")
+        basic.pause(500)
+        basic.clearScreen()
+        basic.showNumber(value)
+    }
+})
 let A_antiExplode = 0
 let globalTime = 0
 let time = 0
+radio.setGroup(143)
 // set this to length of 1 attempt
-let ROUNDLENGTH = 10
+let ROUNDLENGTH = 3
 // set this to break time between "A" press and game start
 let PAUSE = 3
 let highscore = 0
@@ -44,24 +58,10 @@ basic.forever(function () {
         if (score > highscore) {
             highscore = score
         }
-        basic.showLeds(`
-            # # # # #
-            # # # # #
-            # # # # #
-            # # # # #
-            # # # # #
-            `)
-        basic.clearScreen()
-        basic.pause(500)
-        basic.showString("Score")
-        basic.showNumber(score)
-        basic.pause(2000)
-        basic.clearScreen()
-        basic.showString("HI")
-        basic.showNumber(highscore)
-        basic.pause(2000)
-        basic.clearScreen()
+        radio.sendValue("a", score)
+        radio.sendValue("b", highscore)
         score = 0
         A_antiExplode = 0
+        basic.clearScreen()
     }
 })
