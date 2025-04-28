@@ -14,19 +14,6 @@ input.onPinPressed(TouchPin.P1, function () {
         score += 10
     }
 })
-radio.onReceivedValue(function (name, value) {
-    if (name == "a") {
-        basic.showString("SCORE")
-        basic.pause(500)
-        basic.showNumber(value)
-        basic.pause(500)
-    } else {
-        basic.showString("HI")
-        basic.pause(500)
-        basic.clearScreen()
-        basic.showNumber(value)
-    }
-})
 let A_antiExplode = 0
 let globalTime = 0
 let time = 0
@@ -47,13 +34,13 @@ basic.forever(function () {
     if (A_antiExplode == 1) {
         time = globalTime + PAUSE
         while (time > globalTime) {
-            basic.showNumber(time - globalTime)
+            radio.sendValue("c", time - globalTime)
         }
         basic.clearScreen()
-        basic.showString("GO")
+        radio.sendValue("GO", 1)
         time = globalTime + ROUNDLENGTH
         while (time > globalTime) {
-            basic.showNumber(time - globalTime)
+            radio.sendValue("c", time - globalTime)
         }
         if (score > highscore) {
             highscore = score
