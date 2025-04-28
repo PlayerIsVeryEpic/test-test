@@ -3,8 +3,8 @@
     "description": "",
     "dependencies": {
         "core": "*",
-        "microphone": "*",
-        "radio": "*"
+        "radio": "*",
+        "microphone": "*"
     },
     "files": [
         "main.blocks",
