@@ -17,6 +17,7 @@ input.onPinPressed(TouchPin.P1, function () {
 let A_antiExplode = 0
 let globalTime = 0
 let time = 0
+radio.setGroup(143)
 // set this to length of 1 attempt
 let ROUNDLENGTH = 10
 // set this to break time between "A" press and game start
