@@ -1,0 +1,71 @@
+def on_pin_pressed_p0():
+    global score
+    if time - globalTime > 0:
+        score += 5
+input.on_pin_pressed(TouchPin.P0, on_pin_pressed_p0)
+
+# insert sick beats here if u want
+
+def on_received_number(receivedNumber):
+    global A_antiExplode
+    if A_antiExplode == 0:
+        A_antiExplode += 1
+radio.on_received_number(on_received_number)
+
+def on_pin_pressed_p1():
+    global score
+    if time - globalTime > 0:
+        score += 10
+input.on_pin_pressed(TouchPin.P1, on_pin_pressed_p1)
+
+A_antiExplode = 0
+globalTime = 0
+time = 0
+# set this to length of 1 attempt
+ROUNDLENGTH = 10
+# set this to break time between "A" press and game start
+PAUSE = 3
+highscore = 0
+time = 0
+score = 0
+globalTime = 0
+A_antiExplode = 0
+
+def on_every_interval():
+    global globalTime
+    globalTime += 1
+loops.every_interval(1000, on_every_interval)
+
+def on_forever():
+    global time, highscore, score, A_antiExplode
+    if A_antiExplode == 1:
+        time = globalTime + PAUSE
+        while time > globalTime:
+            radio.send_string("" + str((time - globalTime)))
+        basic.clear_screen()
+        basic.show_string("GO")
+        time = globalTime + ROUNDLENGTH
+        while time > globalTime:
+            basic.show_number(time - globalTime)
+        if score > highscore:
+            highscore = score
+        basic.show_leds("""
+            # # # # #
+            # # # # #
+            # # # # #
+            # # # # #
+            # # # # #
+            """)
+        basic.clear_screen()
+        basic.pause(500)
+        basic.show_string("Score")
+        basic.show_number(score)
+        basic.pause(2000)
+        basic.clear_screen()
+        basic.show_string("HI")
+        basic.show_number(highscore)
+        basic.pause(2000)
+        basic.clear_screen()
+        score = 0
+        A_antiExplode = 0
+basic.forever(on_forever)

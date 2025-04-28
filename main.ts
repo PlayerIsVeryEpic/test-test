@@ -4,7 +4,7 @@ input.onPinPressed(TouchPin.P0, function () {
     }
 })
 // insert sick beats here if u want
-input.onButtonPressed(Button.A, function () {
+radio.onReceivedNumber(function (receivedNumber) {
     if (A_antiExplode == 0) {
         A_antiExplode += 1
     }
@@ -33,13 +33,14 @@ basic.forever(function () {
     if (A_antiExplode == 1) {
         time = globalTime + PAUSE
         while (time > globalTime) {
-            basic.showNumber(time - globalTime)
+            radio.sendString("" + (time - globalTime))
         }
-        basic.clearScreen()
-        basic.showString("GO")
+        // This is clear screen command
+        radio.sendNumber(0)
+        radio.sendString("GO")
         time = globalTime + ROUNDLENGTH
         while (time > globalTime) {
-            basic.showNumber(time - globalTime)
+            radio.sendString("" + (time - globalTime))
         }
         if (score > highscore) {
             highscore = score
@@ -51,16 +52,16 @@ basic.forever(function () {
             # # # # #
             # # # # #
             `)
-        basic.clearScreen()
         basic.pause(500)
-        basic.showString("Score")
-        basic.showNumber(score)
+        radio.sendNumber(0)
+        radio.sendString("Score")
+        radio.sendString("" + (score))
         basic.pause(2000)
-        basic.clearScreen()
-        basic.showString("HI")
-        basic.showNumber(highscore)
+        radio.sendNumber(0)
+        radio.sendString("HI")
+        radio.sendString("" + (highscore))
         basic.pause(2000)
-        basic.clearScreen()
+        radio.sendNumber(0)
         score = 0
         A_antiExplode = 0
     }
